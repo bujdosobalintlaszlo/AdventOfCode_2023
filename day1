@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+class CalibrationValuesExtractor
+{
+    static int Part1(List<string> data)
+    {
+        int res = 0;
+        foreach (string line in data)
+        {
+            List<char> digits = new List<char>();
+            foreach (char c in line)
+            {
+                if (char.IsDigit(c))
+                {
+                    digits.Add(c);
+                }
+            }
+            res += int.Parse(digits[0].ToString() + digits[digits.Count - 1].ToString());
+        }
+        return res;
+    }
+
+    static int Part2(List<string> data)
+    {
+        int res = 0;
+        string[] strDigits = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+        foreach (string line in data)
+        {
+            List<char> digits = new List<char>();
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (char.IsDigit(line[i]))
+                {
+                    digits.Add(line[i]);
+                    continue;
+                }
+                foreach (var (digit, index) in strDigits.Select((digit, index) => (digit, index)))
+                {
+                    if (line.Substring(i).StartsWith(digit))
+                    {
+                        digits.Add((index + 1).ToString()[0]);
+                    }
+                }
+            }
+            res += int.Parse(digits[0].ToString() + digits[digits.Count - 1].ToString());
+        }
+        return res;
+    }
+
+    static void Main()
+    {
+        List<string> data = File.ReadAllLines("inp.txt").ToList();
+        Console.WriteLine(Part1(data));
+        Console.WriteLine(Part2(data));
+        Console.ReadLine();
+    }
+}
